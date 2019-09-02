@@ -1,0 +1,9 @@
+html,body,.app{
+    height:100vh;
+    background: #eee;
+    padding:1em;
+
+}
+.ui.stacked.segment:after, .ui.stacked.segment:after{
+    height: 0 !important;
+}
