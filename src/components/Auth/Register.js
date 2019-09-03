@@ -66,7 +66,7 @@ class Register extends Component{
             error={message:CONSTANTS.ErrorMessages.ALL_FIELDS_MANDATORY}
             this.setState({errors:errors.concat(error)})
             return false
-        } else if(!this .isPasswordValid(this.state)){
+        } else if(!this.isPasswordValid(this.state)){
             return false
         } else {
             return true
