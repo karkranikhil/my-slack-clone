@@ -62,7 +62,7 @@ class Login extends Component{
             <Grid textAlign="center" verticalAlign="middle" className="app">
                 <Grid.Column style={{maxWidth:450}}>
                     <Header as="h2" className="slack-color" textAlign="center">
-                        <Icon name="shield alternate" className="slack-color"/>
+                        <Icon name="american sign language interpreting" className="slack-color"/>
                         Login to Connect
                     </Header>
                     <Form size="large" autoComplete="off" onSubmit={this.handleSubmit}>
