@@ -19,6 +19,7 @@ class Messages extends Component{
             this.addListner(channel.id)
         }
     }
+    
     addListner = channelId=>{
         this.addMessageListner(channelId)
     }
