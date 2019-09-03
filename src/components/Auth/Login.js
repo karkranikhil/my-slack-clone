@@ -61,9 +61,9 @@ class Login extends Component{
         return (
             <Grid textAlign="center" verticalAlign="middle" className="app">
                 <Grid.Column style={{maxWidth:450}}>
-                    <Header as="h2" color="violet" textAlign="center">
-                        <Icon name="shield alternate" color="violet"/>
-                        Login to DevChat
+                    <Header as="h2" className="slack-color" textAlign="center">
+                        <Icon name="american sign language interpreting" className="slack-color"/>
+                        Login to Connect
                     </Header>
                     <Form size="large" autoComplete="off" onSubmit={this.handleSubmit}>
                         <Segment stacked>
@@ -74,7 +74,7 @@ class Login extends Component{
                             className={this.handleInputError(errors, 'password')}
                             placeholder="Password" onChange={this.handleChange} value={password}/>
 
-                            <Button disabled={loading} className={loading? 'loading':''} color="violet" fluid size="large">Submit</Button>
+                            <Button disabled={loading} className={loading? 'loading slack-bgcolor white-color':'slack-bgcolor white-color'} fluid size="large">Submit</Button>
                         </Segment>
                     </Form>
                     {errors.length>0 && (
@@ -85,7 +85,7 @@ class Login extends Component{
                         </Message>
                         
                     )}
-                    <Message>Don't have an account?<Link to="/register"> Register</Link></Message>
+                    <Message>Don't have an account?<Link to="/register" className="slack-color"> Register</Link></Message>
                 </Grid.Column>
             </Grid>
         )

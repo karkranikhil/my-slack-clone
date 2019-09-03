@@ -18,7 +18,7 @@ import firebase from './firebase'
 import Spinner from './spinner'
 /****redux custom imports  ****/
 import rootReducer from './reducers/index'
-import {setUser} from './actions/index'
+import {setUser, clearUser} from './actions/index'
 
 const store = createStore(rootReducer, composeWithDevTools())
 
@@ -32,6 +32,9 @@ class Root extends Component{
             if(user){
                 this.props.setUser(user)
                 this.props.history.push('/')
+            } else {
+                this.props.history.push('/login')
+                this.props.clearUser()
             }
         })
     }
@@ -46,7 +49,8 @@ class Root extends Component{
     }
 }
 const mapDispatchToProps= {
-    setUser
+    setUser,
+    clearUser
   }
 const mapStateToProps=state=>({
     isLoading:state.user.isLoading
