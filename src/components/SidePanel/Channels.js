@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import firebase from '../../firebase'
-import {Menu, Icon, Modal, Form, Input, Button} from 'semantic-ui-react'
+import {Menu, Icon, Modal, Form, Button, Input} from 'semantic-ui-react'
 
 import {connect} from 'react-redux'
 import {setCurrentChannel} from '../../actions/index'
@@ -43,7 +43,7 @@ class Channels extends Component{
         this.setState({activeChannel:channel.id})
     }
      /** Lifecycle Hook On un Mount */
-    componentDidUnmount(){
+     componentWillUnmount(){
         this.removeListners()
     }
     
@@ -130,11 +130,11 @@ class Channels extends Component{
             <Form>
                 <Form.Field>
                 <label htmlFor="channelName">Name of Channel</label>
-                <input id="channelName" name="channelName" placeholder='Enter Name of channel' value={channelName} onChange={this.handleChange} />
+                <Input id="channelName" name="channelName" placeholder='Enter Name of channel' value={channelName} onChange={this.handleChange} />
                 </Form.Field>
                 <Form.Field>
                 <label htmlFor="channelDetails">About the Channel</label>
-                <input id="channelDetails" name="channelDetails" placeholder='Enter about the channel' value={channelDetails} onChange={this.handleChange} />
+                <Input id="channelDetails" name="channelDetails" placeholder='Enter about the channel' value={channelDetails} onChange={this.handleChange} />
                 </Form.Field>
             </Form>
             </Modal.Content>
