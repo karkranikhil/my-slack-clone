@@ -109,9 +109,9 @@ class Register extends Component{
         return (
             <Grid textAlign="center" verticalAlign="middle" className="app">
                 <Grid.Column style={{maxWidth:450}}>
-                    <Header as="h2" color="orange" textAlign="center">
-                        <Icon name="shield alternate" color="orange"/>
-                        Register for DevChat
+                    <Header as="h2" className="slack-color" textAlign="center">
+                        <Icon name="american sign language interpreting" className="slack-color"/>
+                        Register for Connect
                     </Header>
                     <Form size="large" autoComplete="off" onSubmit={this.handleSubmit}>
                         <Segment stacked>
@@ -127,7 +127,7 @@ class Register extends Component{
                             className={this.handleInputError(errors, 'password')}
                             placeholder="Password Confirmation" onChange={this.handleChange} value={passwordConfirmation}/>
 
-                            <Button disabled={loading} className={loading? 'loading':''} color="orange" fluid size="large">Submit</Button>
+                            <Button disabled={loading} className={loading? 'loading slack-bgcolor white-color':'slack-bgcolor white-color'} fluid size="large">Submit</Button>
                         </Segment>
                     </Form>
                     {errors.length>0 && (
@@ -138,7 +138,7 @@ class Register extends Component{
                         </Message>
                         
                     )}
-                    <Message>Already a user?<Link to="/login"> Login</Link></Message>
+                    <Message>Already a user?<Link to="/login" className="slack-color"> Login</Link></Message>
                 </Grid.Column>
             </Grid>
         )

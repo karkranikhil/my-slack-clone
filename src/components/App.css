@@ -7,3 +7,12 @@ html,body,.app{
 .ui.stacked.segment:after, .ui.stacked.segment:after{
     height: 0 !important;
 }
+.slack-bgcolor{
+    background: #3F0F3F !important;
+}
+.slack-color{
+    color: #3F0F3F !important;
+}
+.white-color{
+    color:#fff!important;
+}
