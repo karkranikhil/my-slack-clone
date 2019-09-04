@@ -31,7 +31,7 @@ html,body,.app{
 .message__form{
     position: fixed !important;
     bottom:1em;
-    margin-left:320px !important;
+    margin-left:347px !important;
     left:0;
     right:1em;
     z-index:200;
@@ -47,4 +47,7 @@ html,body,.app{
 }
 .progress__bar{
     margin:0.3rem 0 0 0 !important;
+}
+.menu{
+    padding-bottom: 2rem;
 }
