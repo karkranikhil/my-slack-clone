@@ -10,7 +10,11 @@ class Messages extends Component{
         messagesLoading:false,
         messagesRef:firebase.database().ref('messages'),
         channel:this.props.currentChannel,
-        user:this.props.currentUser
+        user:this.props.currentUser,
+        numUniqueUsers:'',
+        searchTerm:'',
+        searchLoading:false,
+        searchResult:[]
 
     }
     componentDidMount(){
@@ -32,8 +36,23 @@ class Messages extends Component{
                 messages:loadedMessage,
                 messagesLoading:false
             })
+            this.countUniqueUsers(loadedMessage)
         })
     }
+
+    countUniqueUsers=messages=>{
+        const uniqueUsers = messages.reduce((acc, message)=>{
+            if(!acc.includes(message.user.name)){
+                acc.push(message.user.name)
+            }
+            return acc;
+        },[])
+        const plural = uniqueUsers.length>0 || uniqueUsers.length === 0
+        const numUniqueUsers = `${uniqueUsers.length} user${plural ? 's':''}`
+        this.setState({numUniqueUsers})
+    }
+
+
     displayMessages=messages=>(
         messages.length>0 && messages.map(message=>(
             <Message
@@ -43,14 +62,40 @@ class Messages extends Component{
             />
         ))
     )
+
+    displayChannelName=channel=>channel? `#${channel.name}`:''
+
+    handleSearchChange  = event =>{
+        this.setState({
+            searchTerm:event.target.value,
+            searchLoading:true
+        }, ()=>this.handleSearchMessages())
+    }
+
+    handleSearchMessages=()=>{
+        const channelMessages =[...this.state.messages]
+        const regex = new RegExp(this.state.searchTerm, 'gi')
+        const searchResult  = channelMessages.reduce((acc, message)=>{
+            if((message.content && message.content.match(regex)) || (message.user && message.user.name.match(regex))){
+                acc.push(message)
+            }
+            return acc
+        },[])
+        this.setState({searchResult})
+        setTimeout(()=>this.setState({searchLoading:false}), 1000)
+    }
     render(){
-        const {messagesRef, messages, channel, user} = this.state
+        const {messagesRef, messages, channel, user, numUniqueUsers, searchResult, searchTerm, searchLoading} = this.state
         return(
             <React.Fragment>
-                <MessagesHeader/>
+                <MessagesHeader 
+                channelName={this.displayChannelName(channel)}
+                numUniqueUsers={numUniqueUsers}
+                handleSearchChange={this.handleSearchChange}
+                searchLoading={searchLoading}/>
                 <Segment>
                     <Comment.Group className="messages">
-                        {this.displayMessages(messages)}
+                        {searchTerm ? this.displayMessages(searchResult):this.displayMessages(messages)}
                     </Comment.Group>
                 </Segment>
                 <MessageForm

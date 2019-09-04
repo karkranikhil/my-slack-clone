@@ -3,6 +3,7 @@ import firebase from '../../firebase'
 import FileModal from './FileModal'
 import uuidv4 from 'uuid/v4'
 import {Segment, Button, Input} from 'semantic-ui-react'
+import ProgressBar from './ProgressBar';
 class MessageForm extends Component{
     state={
         uploadState:'',
@@ -110,7 +111,7 @@ class MessageForm extends Component{
         })
     }
     render(){
-        const{errors, message, loading, modal} = this.state
+        const{errors, message, loading, modal, uploadState, percentUploaded} = this.state
         return(
                 <Segment className="message__form">
                     <Input
@@ -125,13 +126,17 @@ class MessageForm extends Component{
                         onChange={this.handleChange}/>
                     <Button.Group icon widths="2">
                         <Button disabled={loading} className="slack-yellow white-color" content="Add Reply" labelPosition="left" icon="edit" onClick={this.sendMessage}/>
-                        <Button className="slack-green white-color" content="Upload Media" labelPosition="right" icon="cloud upload" onClick={this.openModal}/>
-                        <FileModal
+                        <Button disabled={uploadState === 'uploading'} className="slack-green white-color" content="Upload Media" labelPosition="right" icon="cloud upload" onClick={this.openModal}/>
+                        
+                    </Button.Group>
+                    <FileModal
                             modal={modal}
                             closeModal={this.closeModal}
                             uploadFile={this.uploadFile}
                         />
-                    </Button.Group>
+                        <ProgressBar
+                        uploadState={uploadState}
+                        percentUploaded={percentUploaded}/>
                 </Segment>
         )
     }
