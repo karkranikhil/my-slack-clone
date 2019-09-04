@@ -26,6 +26,7 @@ html,body,.app{
     height: calc(100vh - 300px);
     overflow-y: scroll;
     width: 100%;
+    max-width: 100% !important;
 }
 .message__form{
     position: fixed !important;
@@ -38,4 +39,12 @@ html,body,.app{
 .message__self{
     border-left:2px solid orange;
     padding-left:8px;
+}
+.message__image{
+    padding:1em;
+    max-height: 500px !important;
+    max-width:500px;
+}
+.progress__bar{
+    margin:0.3rem 0 0 0 !important;
 }

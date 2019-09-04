@@ -10,7 +10,6 @@ const App =({currentUser, currentChannel})=>(
   <Grid columns="equal" className="app" style={{background:"#eee"}}>
     <ColorPanel/>
     <SidePanel 
-    key={currentChannel && currentChannel.id}
     currentUser={currentUser}/>
     <Grid.Column style={{marginLeft:320}}>
       <Messages 
