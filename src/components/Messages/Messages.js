@@ -4,6 +4,8 @@ import MessageForm from './MessageForm'
 import {Segment, Comment} from 'semantic-ui-react'
 import firebase from '../../firebase'
 import Message from './Message'
+import {connect} from 'react-redux'
+import {setUserPosts} from '../../actions/index'
 class Messages extends Component{
     state={
         privateChannel:this.props.isPrivateChannel,
@@ -43,6 +45,7 @@ class Messages extends Component{
                 messagesLoading:false
             })
             this.countUniqueUsers(loadedMessage)
+            this.countUserPosts(loadedMessage)
         })
     }
     addUserStarsListner=(channelId, userId)=>{
@@ -63,7 +66,20 @@ class Messages extends Component{
         const {messagesRef, privateMessagesRef, privateChannel} = this.state
         return privateChannel? privateMessagesRef:messagesRef
     }
-
+    countUserPosts= messages=>{
+        let userPosts = messages.reduce((acc, message)=>{
+            if(message.user.name in acc){
+                acc[message.user.name].count +=1
+            } else {
+                acc[message.user.name]={
+                    avatar:message.user.avatar,
+                    count:1
+                }
+            }
+            return acc;
+        },{})
+        this.props.setUserPosts(userPosts)
+    }
     countUniqueUsers=messages=>{
         const uniqueUsers = messages.reduce((acc, message)=>{
             if(!acc.includes(message.user.name)){
@@ -167,4 +183,4 @@ class Messages extends Component{
         )
     }
 }
-export default Messages
+export default connect(null, {setUserPosts})(Messages)
