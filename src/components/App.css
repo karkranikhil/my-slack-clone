@@ -1,8 +1,9 @@
 html,body,.app{
     height:100vh;
     background: #eee;
-    padding:1em;
-
+}
+body{
+    padding: 1rem;
 }
 .ui.stacked.segment:after, .ui.stacked.segment:after{
     height: 0 !important;
@@ -50,4 +51,29 @@ html,body,.app{
 }
 .menu{
     padding-bottom: 2rem;
+}
+.mb-2{
+    margin-bottom: 2rem !important;
+}
+.mb-1{
+    margin-bottom: 1rem !important;
+}
+/**color pannel**/
+
+.color__container{
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 35px;
+    border-radius: 3px;
+}
+.color__square{
+    width:35px;
+    height: 35px;
+}
+
+.color__overlay{
+    width:85px;
+    height: 35px;
+    transform: rotate(225deg)
 }
