@@ -15,7 +15,8 @@ class MessageForm extends Component{
         channel:this.props.currentChannel,
         user:this.props.currentUser,
         errors:[],
-        modal:false
+        modal:false,
+        typingRef:firebase.database().ref('typing')
     }
     openModal=()=>this.setState({modal:true})
     closeModal=()=>this.setState({modal:false})
@@ -40,7 +41,7 @@ class MessageForm extends Component{
     }
     sendMessage=()=>{
         const {getMessagesRef} = this.props;
-        const {message, channel} = this.state
+        const {message, channel, typingRef, user} = this.state
         if(message){
             this.setState({loading:true})
             getMessagesRef()
@@ -49,6 +50,10 @@ class MessageForm extends Component{
             .set(this.createMessage())
             .then(()=>{
                 this.setState({loading:false, message:'', errors:[]})
+                typingRef
+                .child(channel.id)
+                .child(user.uid)
+                .remove()
             }).catch(err=>{
                 console.error(err)
                 this.setState({
@@ -119,6 +124,21 @@ class MessageForm extends Component{
             })
         })
     }
+
+    handleKeyDown=()=>{
+        const {message, typingRef, channel, user} = this.state
+        if(message){
+            typingRef
+            .child(channel.id)
+            .child(user.uid)
+            .set(user.displayName)
+        } else {
+            typingRef
+            .child(channel.id)
+            .child(user.uid)
+            .remove()
+        }
+    }
     render(){
         const{errors, message, loading, modal, uploadState, percentUploaded} = this.state
         return(
@@ -130,6 +150,7 @@ class MessageForm extends Component{
                         label={<Button icon={'add'}/>}
                         labelPosition="left"
                         value={message}
+                        onKeyDown={this.handleKeyDown}
                         className={errors.some(error=>error.message.toLowerCase().includes('message'))? 'error':''}
                         placeholder="write your messages"
                         onChange={this.handleChange}/>
