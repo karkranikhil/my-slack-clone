@@ -55,7 +55,7 @@ class ColorPanel extends Component{
 
     displayUserColors=colors=>(
         colors.length>0 && colors.map((color,i)=>(
-            <React.Fragment>
+            <React.Fragment key={i}>
                 <Divider/>
                 <div className="color__container" onClick={()=>this.props.setColors(color.primary, color.secondary)}>
                     <div className="color__square" style={{background:color.primary}}>
