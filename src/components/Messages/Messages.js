@@ -30,6 +30,15 @@ class Messages extends Component{
             this.addUserStarsListner(channel.id, user.uid)
         }
     }
+
+    componentDidUpdate(prevProps, prevState){
+        if(this.messagesEnd){
+            this.scrollToBottom()
+        }
+    }
+    scrollToBottom=()=>{
+        this.messagesEnd.scrollIntoView({behavior:'smooth'})
+    }
     
     addListner = channelId=>{
         this.addMessageListner(channelId)
@@ -169,7 +178,11 @@ class Messages extends Component{
                  isChannelStarred={isChannelStarred}/>
                 <Segment>
                     <Comment.Group className="messages">
-                        {searchTerm ? this.displayMessages(searchResult):this.displayMessages(messages)}
+                        {searchTerm 
+                            ? this.displayMessages(searchResult)
+                            :this.displayMessages(messages)
+                            }
+                            <div ref={node=>(this.messagesEnd = node)}></div>
                     </Comment.Group>
                 </Segment>
                 <MessageForm
