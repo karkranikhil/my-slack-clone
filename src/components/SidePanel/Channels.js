@@ -17,7 +17,8 @@ class Channels extends Component{
         firstLoad:true,
         channel:null,
         messagesRef:firebase.database().ref('messages'),
-        notifications:[]
+        notifications:[],
+        typingRef:firebase.database().ref('typing')
 
     }
     /** Lifecycle Hook On  Mount */
@@ -154,6 +155,10 @@ class Channels extends Component{
     /** change the channel */
     changeChannel=channel=>{
         this.setActiveChannel(channel)
+        this.state.typingRef
+            .child(this.state.channel.id)
+            .child(this.state.user.uid)
+            .remove()
         this.clearNotifications()
         this.props.setCurrentChannel(channel)
         this.props.setPrivateChannel(false)

@@ -6,6 +6,7 @@ import firebase from '../../firebase'
 import Message from './Message'
 import {connect} from 'react-redux'
 import {setUserPosts} from '../../actions/index'
+import Typing from '../Messages/Typing'
 class Messages extends Component{
     state={
         privateChannel:this.props.isPrivateChannel,
@@ -20,7 +21,10 @@ class Messages extends Component{
         searchLoading:false,
         searchResult:[],
         isChannelStarred:false,
-        usersRef:firebase.database().ref('users')
+        usersRef:firebase.database().ref('users'),
+        typingRef:firebase.database().ref('typing'),
+        typingUsers:[],
+        connectedRef:firebase.database().ref('.info/connected'),
 
     }
     componentDidMount(){
@@ -30,10 +34,57 @@ class Messages extends Component{
             this.addUserStarsListner(channel.id, user.uid)
         }
     }
+
+    componentDidUpdate(prevProps, prevState){
+        if(this.messagesEnd){
+            this.scrollToBottom()
+        }
+    }
+    scrollToBottom=()=>{
+        this.messagesEnd.scrollIntoView({behavior:'smooth'})
+    }
     
     addListner = channelId=>{
         this.addMessageListner(channelId)
+        this.addTypingListners(channelId)
     }
+
+    addTypingListners=channelId=>{
+        let typingUsers=[]
+        let {typingRef, user} = this.state
+        typingRef.child(channelId).on('child_added', snap=>{
+            if(snap.key !== user.uid){
+                typingUsers=typingUsers.concat({
+                    id:snap.key,
+                    name:snap.val()
+                })
+                this.setState({typingUsers})
+            }
+        })
+
+        typingRef.child(channelId).on('child_removed', snap=>{
+            const index = typingUsers.findIndex(user=>user.id == snap.key)
+            if(index !==-1){
+                typingUsers = typingUsers.filter(user=>user.id !== snap.key)
+                this.setState({typingUsers})
+            }
+        })
+        this.state.connectedRef.on('value', snap=>{
+            if(snap.val() === true){
+                typingRef
+                .child(channelId)
+                .child(user.uid)
+                .onDisconnect()
+                .remove(err=>{
+                    if(err!==null){
+                        console.error(err)
+                    }
+                })
+            }
+        })
+
+    }
+
     addMessageListner = channelId=>{
         let loadedMessage=[]
         const ref = this.getMessagesRef()
@@ -155,8 +206,15 @@ class Messages extends Component{
         this.setState({searchResult})
         setTimeout(()=>this.setState({searchLoading:false}), 1000)
     }
+    displayTypingUsers=users=>(
+        users.length>0 && users.map(user=>(
+            <div style={{display:'flex', alignItems:'center', marginBottom:'0.2em'}} key={user.id}>
+                <span className="user__typing">Nikhil is typing</span><Typing/>
+            </div>
+        ))
+    )
     render(){
-        const {messagesRef, messages, channel, user, numUniqueUsers, searchResult, searchTerm, searchLoading, privateChannel, isChannelStarred} = this.state
+        const {messagesRef, messages, channel, user, numUniqueUsers, searchResult, searchTerm, searchLoading, privateChannel, isChannelStarred, typingUsers} = this.state
         return(
             <React.Fragment>
                 <MessagesHeader 
@@ -169,7 +227,13 @@ class Messages extends Component{
                  isChannelStarred={isChannelStarred}/>
                 <Segment>
                     <Comment.Group className="messages">
-                        {searchTerm ? this.displayMessages(searchResult):this.displayMessages(messages)}
+                        {searchTerm 
+                            ? this.displayMessages(searchResult)
+                            :this.displayMessages(messages)
+                            }
+                            {this.displayTypingUsers(typingUsers)}
+                            <div ref={node=>(this.messagesEnd = node)}></div>
+                            
                     </Comment.Group>
                 </Segment>
                 <MessageForm
