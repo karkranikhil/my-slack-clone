@@ -9,7 +9,7 @@ import 'emoji-mart/css/emoji-mart.css'
 class MessageForm extends Component{
     state={
         uploadState:'',
-        uploadtask:null,
+        uploadTask:null,
         percentUploaded:0,
         storageRef:firebase.storage().ref(),
         message:'',
@@ -23,6 +23,14 @@ class MessageForm extends Component{
     }
     openModal=()=>this.setState({modal:true})
     closeModal=()=>this.setState({modal:false})
+
+    componentWillUnmount(){
+        if(this.state.uploadTask !== null){
+            this.state.uploadTask.cancel()
+            this.setState({uploadTask:null})
+        }
+    }
+
     handleChange=event=>{
         this.setState({[event.target.name]:event.target.value})
     }
@@ -73,7 +81,7 @@ class MessageForm extends Component{
     
     getPath =()=>{
         if(this.props.isPrivateChannel){
-            return `chat/private-${this.state.channel.id}`
+            return `chat/private/${this.state.channel.id}`
         } else {
             return `chat/public`
         }
