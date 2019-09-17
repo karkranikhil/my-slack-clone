@@ -25,3 +25,6 @@ I am building an clone of the Slack using react redux and firebase.
     * semantic-ui-css
     * semantic-ui-react
     * uuid
+
+### Component Architecture
+<img src="./Screen Shot 2019-09-09 at 11.26.34 pm.png"/>
