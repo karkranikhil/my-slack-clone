@@ -7,6 +7,7 @@ import Message from './Message'
 import {connect} from 'react-redux'
 import {setUserPosts} from '../../actions/index'
 import Typing from '../Messages/Typing'
+import Skeleton from '../Messages/Skeleton'
 class Messages extends Component{
     state={
         privateChannel:this.props.isPrivateChannel,
@@ -209,12 +210,22 @@ class Messages extends Component{
     displayTypingUsers=users=>(
         users.length>0 && users.map(user=>(
             <div style={{display:'flex', alignItems:'center', marginBottom:'0.2em'}} key={user.id}>
-                <span className="user__typing">Nikhil is typing</span><Typing/>
+                <span className="user__typing">{user.name} is typing</span><Typing/>
             </div>
         ))
     )
+    displayMessagesSkeleton=loading=>(
+        loading?(
+            <React.Fragment>
+                {[...Array(10)].map((_,i)=>(
+                    <Skeleton key={i}/>
+                ))}
+            </React.Fragment>
+        ):null
+    )
     render(){
-        const {messagesRef, messages, channel, user, numUniqueUsers, searchResult, searchTerm, searchLoading, privateChannel, isChannelStarred, typingUsers} = this.state
+        const {messagesRef, messages, channel, user, numUniqueUsers, searchResult, searchTerm, 
+            searchLoading, privateChannel, isChannelStarred, typingUsers, messagesLoading} = this.state
         return(
             <React.Fragment>
                 <MessagesHeader 
@@ -227,6 +238,7 @@ class Messages extends Component{
                  isChannelStarred={isChannelStarred}/>
                 <Segment>
                     <Comment.Group className="messages">
+                        {this.displayMessagesSkeleton(messagesLoading)}
                         {searchTerm 
                             ? this.displayMessages(searchResult)
                             :this.displayMessages(messages)
